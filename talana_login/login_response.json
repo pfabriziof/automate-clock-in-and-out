@@ -1,0 +1,17 @@
+{
+	"error": false,
+	"message": "",
+	"destination": "/es/remuneraciones/",
+	"action": "redirect",
+	"token": "my_super_secret_token",
+	"companies": [
+		[
+			1111,
+			"THE BEST COMPANY EVER",
+			""
+		]
+	],
+	"expiration": "",
+	"token_hodor": "eyJ...",
+	"expires_at": "900s"
+}
