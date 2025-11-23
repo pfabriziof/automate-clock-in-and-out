@@ -19,17 +19,3 @@ variable "api_clockin_url" {
   description = "The full API endpoint URL for clocking in."
   type        = string
 }
-
-variable "clockin_cron" {
-  description = "EventBridge cron expression for clockin time (e.g., 'cron(0 9 * * ? *)' for 9:00 AM UTC)."
-  type        = string
-  # Example: 9:00 AM UTC
-  default = "cron(0 9 * * ? *)"
-}
-
-variable "clockout_cron" {
-  description = "EventBridge cron expression for clockout time (e.g., 'cron(0 17 * * ? *)' for 5:00 PM UTC)."
-  type        = string
-  # Example: 5:00 PM UTC
-  default = "cron(0 17 * * ? *)"
-}

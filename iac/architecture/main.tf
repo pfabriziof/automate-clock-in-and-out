@@ -88,23 +88,3 @@ resource "aws_iam_role_policy_attachment" "lambda_ecr_policy_attach" {
   role       = aws_iam_role.lambda_exec_role.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }
-
-# region: Lambda function
-resource "aws_lambda_function" "checkin_lambda" {
-  function_name = "${var.project_nickname}-main-handler"
-  package_type  = "Image"
-  image_uri     = "${aws_ecr_repository.lambda_ecr_repo.repository_url}:latest"
-  role          = aws_iam_role.lambda_exec_role.arn
-  timeout       = 30
-
-  environment {
-    variables = {
-      SECRET_ARN = aws_secretsmanager_secret.config_secret.arn
-    }
-  }
-
-  tags = {
-    owner   = "the-pragmatic-programmer"
-    project = "clockin-automation"
-  }
-}
