@@ -1,0 +1,78 @@
+*.env
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+# C extensions
+*.so
+# databases
+*.db
+*.faiss
+*.pkl
+# files
+*.pdf
+*.png
+*.jpg
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+venv/
+*.c
+
+# Terraform
+.terraform/
+.terraform.lock.hcl
+
+# Compiled files
+*.tfstate
+*.tfstate.backup
+*.tfstate.lock.info
+*.tfvars
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+*.tar.gz
+*.pem
+*.pub
+
+# testing
+/coverage
+
+# buid
+temp*
+*.zip
+
+# Unit test / coverage reports
+.tox/
+.coverage
+.coverage.*
+.cache
+*.cover
+*.py,cover
+.pytest_cache/
+cover/
