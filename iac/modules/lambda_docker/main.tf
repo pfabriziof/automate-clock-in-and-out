@@ -1,6 +1,6 @@
 
-resource "aws_iam_role" "lambda_exec_role" {
-  name_prefix = "${var.project_nickname}-lambda-role"
+resource "aws_iam_role" "function_role" {
+  name_prefix = "${var.function_name}-role"
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
     Statement = [{
@@ -11,10 +11,6 @@ resource "aws_iam_role" "lambda_exec_role" {
       }
     }]
   })
-  tags = {
-    owner = var.owner_tag
-    project = var.project_tag
-  }
 }
 
 resource "aws_iam_policy" "ecr_policy" {
@@ -41,8 +37,6 @@ resource "aws_iam_policy" "ecr_policy" {
   })
   tags = {
     name = "${var.function_name}-ecr-policy"
-    owner = var.owner_tag
-    project = var.function_name
   }
 }
 
@@ -58,21 +52,22 @@ resource "aws_iam_role_policy_attachments_exclusive" "lambda_managed" {
   )
 }
 
-resource "aws_lambda_function" "clockin_lambda" {
-  function_name = "${var.project_nickname}-main-handler"
+resource "aws_lambda_function" "function" {
+  function_name = var.function_name
   package_type  = "Image"
   image_uri     = "${var.ecr_function_repo.uri}:latest"
-  role          = aws_iam_role.lambda_exec_role.arn
-  timeout       = 30
-
-  environment {
-    variables = {
-      SECRET_ARN = aws_secretsmanager_secret.config_secret.arn
-    }
+  role          = aws_iam_role.function_role.arn
+  architectures = [var.function_architecture]
+  timeout       = var.timeout
+  memory_size   = var.memory_size
+  tracing_config {
+    mode = "Active"
   }
-
-  tags = {
-    owner   = var.owner_tag
-    project = var.project_tag
+  vpc_config {
+    subnet_ids         = var.subnet_ids
+    security_group_ids = var.security_group_ids
+  }
+  environment {
+    variables = var.function_env_vars
   }
 }

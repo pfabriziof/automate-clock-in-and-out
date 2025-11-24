@@ -23,11 +23,11 @@ variable "api_clockin_url" {
 variable "owner_tag" {
   description = "owner tag for the resources deployed"
   type        = string
-  default     = "the-pragmatic-programmer"
+  default     = "the-pragmatic-architect"
 }
 
 variable "project_tag" {
-  description = "owner tag for the resources deployed"
+  description = "project tag for the resources deployed"
   type        = string
   default     = "clockin-automation"
 }

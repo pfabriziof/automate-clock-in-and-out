@@ -1,7 +1,16 @@
+variable "region" {
+  description = "AWS Region where the solution is going to be deployed"
+  type        = string
+}
 
 variable "project_nickname" {
   description = "A unique name for the project to prefix resources, it should be small."
   type        = string
+}
+
+variable "ecr_repositories" {
+  description = "List of ECR repositories for backend logic."
+  type        = map(any)
 }
 
 variable "clockin_cron" {
@@ -16,4 +25,14 @@ variable "clockout_cron" {
   type        = string
   # Example: 24:00 PM UTC
   default = "cron(0 24 * * ? *)"
+}
+
+variable "api_login_url" {
+  description = "The full API endpoint URL for user login."
+  type        = string
+}
+
+variable "api_clockin_url" {
+  description = "The full API endpoint URL for clocking in."
+  type        = string
 }
