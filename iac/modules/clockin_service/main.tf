@@ -1,9 +1,9 @@
 
 # region: lambda function
 module "clockin_service" {
-  source        = "../lambda_docker"
+  source            = "../lambda_docker"
   ecr_function_repo = var.ecr_repositories["clockin_service"]
-  function_name = "${var.project_nickname}-clockin-service"
+  function_name     = "${var.project_nickname}-clockin-service"
   function_env_vars = {
     SECRET_ARN = aws_secretsmanager_secret.config_secret.arn
   }
