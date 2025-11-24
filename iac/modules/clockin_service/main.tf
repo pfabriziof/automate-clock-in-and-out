@@ -1,24 +1,4 @@
 
-# region: Lambda function
-resource "aws_lambda_function" "clockin_lambda" {
-  function_name = "${var.project_nickname}-main-handler"
-  package_type  = "Image"
-  image_uri     = "${aws_ecr_repository.lambda_ecr_repo.repository_url}:latest"
-  role          = aws_iam_role.lambda_exec_role.arn
-  timeout       = 30
-
-  environment {
-    variables = {
-      SECRET_ARN = aws_secretsmanager_secret.config_secret.arn
-    }
-  }
-
-  tags = {
-    owner   = "the-pragmatic-programmer"
-    project = "clockin-automation"
-  }
-}
-
 # region: clockin rule
 resource "aws_cloudwatch_event_rule" "clockin_rule" {
   name                = "${var.project_nickname}-clockin-schedule"
