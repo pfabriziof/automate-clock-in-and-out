@@ -51,7 +51,7 @@ resource "aws_iam_policy" "lambda_secret_read_policy" {
 resource "aws_cloudwatch_event_rule" "clockin_rule" {
   name                = "${var.project_nickname}-clockin-schedule"
   description         = "Schedule to trigger check-in action."
-  schedule_expression = var.clockin_cron # e.g., cron(0 8 * * ? *)
+  schedule_expression = var.clockin_cron
 }
 
 resource "aws_cloudwatch_event_target" "clockin_target" {
@@ -68,11 +68,28 @@ resource "aws_cloudwatch_event_target" "clockin_target" {
 resource "aws_cloudwatch_event_rule" "clockout_rule" {
   name                = "${var.project_nickname}-clockout-schedule"
   description         = "Schedule to trigger check-out action."
-  schedule_expression = var.clockout_cron # e.g., cron(0 19 * * ? *)
+  schedule_expression = var.clockout_cron
 }
 
 resource "aws_cloudwatch_event_target" "clockout_target" {
   rule = aws_cloudwatch_event_rule.clockout_rule.name
+  arn  = module.clockin_service.function.arn
+  input = jsonencode({
+    detail = {
+      operation = "clock_out"
+    }
+  })
+}
+
+# region: clockout fridays rule
+resource "aws_cloudwatch_event_rule" "clockout_fridays_rule" {
+  name                = "${var.project_nickname}-clockout-schedule"
+  description         = "Schedule to trigger check-out action."
+  schedule_expression = var.clockout_fridays_cron
+}
+
+resource "aws_cloudwatch_event_target" "clockout_fridays_target" {
+  rule = aws_cloudwatch_event_rule.clockout_fridays_rule.name
   arn  = module.clockin_service.function.arn
   input = jsonencode({
     detail = {
