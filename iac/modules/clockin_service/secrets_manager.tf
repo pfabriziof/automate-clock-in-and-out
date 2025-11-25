@@ -10,7 +10,8 @@ resource "aws_secretsmanager_secret_version" "config_secret_version" {
   secret_string = jsonencode({
     API_LOGIN_URL   = var.api_login_url
     API_CLOCKIN_URL = var.api_clockin_url
-    USER_USERNAME   = "john doe"
-    USER_PASSWORD   = "foo"
+    SUCURSAL        = var.sucursal
+    USERNAME        = "john doe"
+    PASSWORD        = "foo"
   })
 }

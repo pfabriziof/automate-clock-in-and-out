@@ -36,3 +36,9 @@ variable "api_clockin_url" {
   description = "The full API endpoint URL for clocking in."
   type        = string
 }
+
+variable "sucursal" {
+  description = "The id for the specific talana branch"
+  type        = string
+  default     = "15327"
+}

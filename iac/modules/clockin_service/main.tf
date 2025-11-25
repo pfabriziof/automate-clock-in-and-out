@@ -5,7 +5,8 @@ module "clockin_service" {
   ecr_function_repo = var.ecr_repositories["clockin_service"]
   function_name     = "${var.project_nickname}-clockin-service"
   function_env_vars = {
-    SECRET_ARN = aws_secretsmanager_secret.config_secret.arn
+    SECRET_ARN      = aws_secretsmanager_secret.config_secret.arn
+    OPERATION_DELAY = 300
   }
   additional_policy_arns = [
     aws_iam_policy.lambda_logging_policy.arn,
@@ -58,7 +59,7 @@ resource "aws_cloudwatch_event_target" "clockin_target" {
   arn  = module.clockin_service.function.arn
   input = jsonencode({
     detail = {
-      operation = "check_in"
+      operation = "clock_in"
     }
   })
 }
@@ -75,7 +76,7 @@ resource "aws_cloudwatch_event_target" "clockout_target" {
   arn  = module.clockin_service.function.arn
   input = jsonencode({
     detail = {
-      operation = "check_out"
+      operation = "clock_out"
     }
   })
 }

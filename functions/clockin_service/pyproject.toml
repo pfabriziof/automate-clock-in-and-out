@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "checkin-service"
+version = "1.0.0"
+description = "AWS Lambda function for automated work check-in/out."
+authors = ["Paolo Falcon pfalcon@morrisopazo.com"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.12,<3.13"
+requests = "^2.32.*"
+pydantic = "^2.12.*"
+boto3 = "^1.41.*"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
