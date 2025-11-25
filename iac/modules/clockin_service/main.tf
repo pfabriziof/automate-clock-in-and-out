@@ -83,7 +83,7 @@ resource "aws_cloudwatch_event_target" "clockout_target" {
 
 # region: clockout fridays rule
 resource "aws_cloudwatch_event_rule" "clockout_fridays_rule" {
-  name                = "${var.project_nickname}-clockout-schedule"
+  name                = "${var.project_nickname}-clockout-fridays-schedule"
   description         = "Schedule to trigger check-out action."
   schedule_expression = var.clockout_fridays_cron
 }
@@ -113,4 +113,12 @@ resource "aws_lambda_permission" "allow_eventbridge_clockout" {
   function_name = module.clockin_service.function.arn
   principal     = "events.amazonaws.com"
   source_arn    = aws_cloudwatch_event_rule.clockout_rule.arn
+}
+
+resource "aws_lambda_permission" "allow_eventbridge_clockout_fridays" {
+  statement_id  = "AllowExecutionFromEventBridgeClockOutFridays"
+  action        = "lambda:InvokeFunction"
+  function_name = module.clockin_service.function.arn
+  principal     = "events.amazonaws.com"
+  source_arn    = aws_cloudwatch_event_rule.clockout_fridays_rule.arn
 }
