@@ -1,3 +1,4 @@
+# Dockerfile
 FROM --platform=${BUILDPLATFORM} public.ecr.aws/docker/library/python:3.12-slim AS builder
 
 # Upgrade pip and install Poetry and build essentials
@@ -8,31 +9,24 @@ RUN pip install --upgrade pip && \
 
 WORKDIR /app/builder
 
-# Copy only what’s necessary to install dependencies first
+# Copy only what's necessary to install dependencies first
 COPY pyproject.toml poetry.lock ./
 
-# Configure and install only main dependencies
+# Configure and install only main dependencies to a target directory
 RUN poetry config virtualenvs.create false && \
     poetry config installer.max-workers 10 && \
-    poetry config cache-dir /tmp/poetry-cache && \
-    poetry install --only main --no-root && \
-    rm -rf /tmp/poetry-cache
-
-# Copy source code
-COPY main.py .
+    poetry install --only main --no-root --no-directory
 
 # Final minimal Lambda image
 FROM --platform=${BUILDPLATFORM} public.ecr.aws/lambda/python:3.12
 
 WORKDIR ${LAMBDA_TASK_ROOT}
 
-# Copy wheels and app entrypoint
-COPY --from=builder /app/builder/dist/ ./dist
-COPY --from=builder /app/builder/main.py ./
+# Copy installed packages from builder stage
+# Python packages are installed in /usr/local/lib/python3.12/site-packages
+COPY --from=builder /usr/local/lib/python3.12/site-packages/ ./
 
-# Install built wheels and clean up
-RUN pip install --no-cache-dir ./dist/* -t . && \
-    rm -rf dist *.whl *.tar.gz
-
+# Copy source code
+COPY main.py ./
 
 CMD [ "main.lambda_handler" ]

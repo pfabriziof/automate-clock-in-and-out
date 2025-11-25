@@ -1,7 +1,7 @@
 
 # region: Secrets Manager
 resource "aws_secretsmanager_secret" "config_secret" {
-  name        = "${var.project_nickname}-secrets"
+  name        = "${var.project_nickname}/clockin_service-secrets"
   description = "Stores API URLs and user credentials for the auto-clockin system."
 }
 
