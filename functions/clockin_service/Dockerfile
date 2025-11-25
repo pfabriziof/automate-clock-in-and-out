@@ -19,7 +19,7 @@ RUN poetry config virtualenvs.create false && \
     rm -rf /tmp/poetry-cache
 
 # Copy source code
-COPY lambda_handler.py .
+COPY main.py .
 
 # Final minimal Lambda image
 FROM --platform=${BUILDPLATFORM} public.ecr.aws/lambda/python:3.12
