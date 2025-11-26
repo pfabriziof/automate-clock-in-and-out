@@ -7,7 +7,7 @@ variable "function_name" {
 variable "function_architecture" {
   type        = string
   description = "Instruction set architecture for Lambda function"
-  default     = "arm64"
+  default     = "x86_64"
 }
 
 variable "function_env_vars" {
