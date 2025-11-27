@@ -86,10 +86,14 @@ resource "aws_iam_role_policy" "scheduler_lambda_policy" {
 }
 
 
+resource "aws_scheduler_schedule_group" "clockin_schedule_group" {
+  name = "${var.project_nickname}-schedule-group"
+}
+
 # clockin schedulers
 resource "aws_scheduler_schedule" "clockin_scheduler" {
   name       = "${var.project_nickname}-clockin-schedule"
-  group_name = "${var.project_nickname}-schedule-group"
+  group_name = aws_scheduler_schedule_group.clockin_schedule_group.name
 
   flexible_time_window {
     maximum_window_in_minutes = var.max_scheduler_window
@@ -109,7 +113,7 @@ resource "aws_scheduler_schedule" "clockin_scheduler" {
 
 resource "aws_scheduler_schedule" "clockout_scheduler" {
   name       = "${var.project_nickname}-clockout-schedule"
-  group_name = "${var.project_nickname}-schedule-group"
+  group_name = aws_scheduler_schedule_group.clockin_schedule_group.name
 
   flexible_time_window {
     maximum_window_in_minutes = var.max_scheduler_window
@@ -129,7 +133,7 @@ resource "aws_scheduler_schedule" "clockout_scheduler" {
 
 resource "aws_scheduler_schedule" "clockout_fridays_scheduler" {
   name       = "${var.project_nickname}-clockout-fridays-schedule"
-  group_name = "${var.project_nickname}-schedule-group"
+  group_name = aws_scheduler_schedule_group.clockin_schedule_group.name
 
   flexible_time_window {
     maximum_window_in_minutes = var.max_scheduler_window
