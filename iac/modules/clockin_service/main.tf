@@ -120,7 +120,7 @@ resource "aws_scheduler_schedule" "clockout_scheduler" {
     mode = "FLEXIBLE"
   }
 
-  schedule_expression = var.clockin_cron
+  schedule_expression = var.clockout_cron
 
   target {
     arn      = module.clockin_service.function.arn
@@ -140,7 +140,7 @@ resource "aws_scheduler_schedule" "clockout_fridays_scheduler" {
     mode = "FLEXIBLE"
   }
 
-  schedule_expression = var.clockin_cron
+  schedule_expression = var.clockout_fridays_cron
 
   target {
     arn      = module.clockin_service.function.arn
