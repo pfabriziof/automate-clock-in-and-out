@@ -101,6 +101,9 @@ resource "aws_scheduler_schedule" "clockin_scheduler" {
   target {
     arn      = module.clockin_service.function.arn
     role_arn = aws_iam_role.scheduler_role.arn
+    input = jsonencode({
+      operation = "clock_in"
+    })
   }
 }
 
@@ -118,6 +121,9 @@ resource "aws_scheduler_schedule" "clockout_scheduler" {
   target {
     arn      = module.clockin_service.function.arn
     role_arn = aws_iam_role.scheduler_role.arn
+    input = jsonencode({
+      operation = "clock_out"
+    })
   }
 }
 
@@ -135,5 +141,8 @@ resource "aws_scheduler_schedule" "clockout_fridays_scheduler" {
   target {
     arn      = module.clockin_service.function.arn
     role_arn = aws_iam_role.scheduler_role.arn
+    input = jsonencode({
+      operation = "clock_out"
+    })
   }
 }

@@ -62,17 +62,10 @@ class AppConfig(BaseModel):
     PASSWORD: str
     SUCURSAL: str
 
-
-class EventDetail(BaseModel):
-    """Schema for the EventBridge 'detail' object."""
-
-    operation: str  # Must be "clock_in" or "clock_out"
-
-
 class EventPayload(BaseModel):
     """Schema for incoming EventBridge event."""
 
-    detail: EventDetail
+    operation: str
 
 
 secretsmanager_client = boto3.client("secretsmanager")
@@ -196,7 +189,7 @@ def lambda_handler(
     operation = "unknown"
     try:
         validate_event = EventPayload(**event)
-        operation = validate_event.detail.operation
+        operation = validate_event.operation
 
         logger.info("Starting scheduled operation: %s", operation)
 
