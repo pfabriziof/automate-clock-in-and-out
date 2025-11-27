@@ -50,16 +50,16 @@ variable "clockout_fridays_cron" {
   default     = "cron(0 22 ? * FRI *)"
 }
 
+variable "max_scheduler_window" {
+  description = "Max scheduler time window in minutes to realize the operation"
+  type        = number
+  default     = 5
+}
+
 variable "sucursal" {
   description = "The id for the specific talana branch"
   type        = string
   default     = "15327"
-}
-
-variable "operation_delay" {
-  description = "The max delay for the operation clock-in/out to execute after it's initiated."
-  type        = number
-  default     = 300
 }
 
 variable "ecr_repositories" {

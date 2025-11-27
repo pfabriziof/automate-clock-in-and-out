@@ -6,7 +6,6 @@ module "clockin_service" {
   function_name     = "${var.project_nickname}-clockin-service"
   function_env_vars = {
     SECRET_ARN      = aws_secretsmanager_secret.config_secret.arn
-    OPERATION_DELAY = var.operation_delay
   }
   additional_policy_arns = [
     aws_iam_policy.lambda_logging_policy.arn,
@@ -47,78 +46,94 @@ resource "aws_iam_policy" "lambda_secret_read_policy" {
   })
 }
 
-# region: clockin rule
-resource "aws_cloudwatch_event_rule" "clockin_rule" {
-  name                = "${var.project_nickname}-clockin-schedule"
-  description         = "Schedule to trigger check-in action."
+# region: clockin scheduler
+# role and policy for eventbridge
+resource "aws_iam_role" "scheduler_role" {
+  name = "${var.project_nickname}-scheduler-role"
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Principal = {
+          Service = "scheduler.amazonaws.com"
+        }
+        Action = "sts:AssumeRole"
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy" "scheduler_lambda_policy" {
+  name = "${var.project_nickname}-scheduler-lambda-policy"
+  role = aws_iam_role.scheduler_role.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = [
+          "lambda:InvokeFunction",
+        ]
+        Effect   = "Allow"
+        Resource = [
+          module.clockin_service.function.arn,
+          "${module.clockin_service.function.arn}:*"
+        ]
+      },
+    ]
+  })
+}
+
+
+# clockin schedulers
+resource "aws_scheduler_schedule" "clockin_scheduler" {
+  name       = "${var.project_nickname}-clockin-schedule"
+  group_name = "${var.project_nickname}-schedule-group"
+
+  flexible_time_window {
+    maximum_window_in_minutes = var.max_scheduler_window
+    mode = "FLEXIBLE"
+  }
+
   schedule_expression = var.clockin_cron
+
+  target {
+    arn      = module.clockin_service.function.arn
+    role_arn = aws_iam_role.scheduler_role.arn
+  }
 }
 
-resource "aws_cloudwatch_event_target" "clockin_target" {
-  rule = aws_cloudwatch_event_rule.clockin_rule.name
-  arn  = module.clockin_service.function.arn
-  input = jsonencode({
-    detail = {
-      operation = "clock_in"
-    }
-  })
+resource "aws_scheduler_schedule" "clockout_scheduler" {
+  name       = "${var.project_nickname}-clockout-schedule"
+  group_name = "${var.project_nickname}-schedule-group"
+
+  flexible_time_window {
+    maximum_window_in_minutes = var.max_scheduler_window
+    mode = "FLEXIBLE"
+  }
+
+  schedule_expression = var.clockin_cron
+
+  target {
+    arn      = module.clockin_service.function.arn
+    role_arn = aws_iam_role.scheduler_role.arn
+  }
 }
 
-# region: clockout rule
-resource "aws_cloudwatch_event_rule" "clockout_rule" {
-  name                = "${var.project_nickname}-clockout-schedule"
-  description         = "Schedule to trigger check-out action."
-  schedule_expression = var.clockout_cron
-}
+resource "aws_scheduler_schedule" "clockout_fridays_scheduler" {
+  name       = "${var.project_nickname}-clockout-fridays-schedule"
+  group_name = "${var.project_nickname}-schedule-group"
 
-resource "aws_cloudwatch_event_target" "clockout_target" {
-  rule = aws_cloudwatch_event_rule.clockout_rule.name
-  arn  = module.clockin_service.function.arn
-  input = jsonencode({
-    detail = {
-      operation = "clock_out"
-    }
-  })
-}
+  flexible_time_window {
+    maximum_window_in_minutes = var.max_scheduler_window
+    mode = "FLEXIBLE"
+  }
 
-# region: clockout fridays rule
-resource "aws_cloudwatch_event_rule" "clockout_fridays_rule" {
-  name                = "${var.project_nickname}-clockout-fridays-schedule"
-  description         = "Schedule to trigger check-out action."
-  schedule_expression = var.clockout_fridays_cron
-}
+  schedule_expression = var.clockin_cron
 
-resource "aws_cloudwatch_event_target" "clockout_fridays_target" {
-  rule = aws_cloudwatch_event_rule.clockout_fridays_rule.name
-  arn  = module.clockin_service.function.arn
-  input = jsonencode({
-    detail = {
-      operation = "clock_out"
-    }
-  })
-}
-
-# region: eventbridge permissions to invoke lambda
-resource "aws_lambda_permission" "allow_eventbridge_clockin" {
-  statement_id  = "AllowExecutionFromEventBridgeClockIn"
-  action        = "lambda:InvokeFunction"
-  function_name = module.clockin_service.function.arn
-  principal     = "events.amazonaws.com"
-  source_arn    = aws_cloudwatch_event_rule.clockin_rule.arn
-}
-
-resource "aws_lambda_permission" "allow_eventbridge_clockout" {
-  statement_id  = "AllowExecutionFromEventBridgeClockOut"
-  action        = "lambda:InvokeFunction"
-  function_name = module.clockin_service.function.arn
-  principal     = "events.amazonaws.com"
-  source_arn    = aws_cloudwatch_event_rule.clockout_rule.arn
-}
-
-resource "aws_lambda_permission" "allow_eventbridge_clockout_fridays" {
-  statement_id  = "AllowExecutionFromEventBridgeClockOutFridays"
-  action        = "lambda:InvokeFunction"
-  function_name = module.clockin_service.function.arn
-  principal     = "events.amazonaws.com"
-  source_arn    = aws_cloudwatch_event_rule.clockout_fridays_rule.arn
+  target {
+    arn      = module.clockin_service.function.arn
+    role_arn = aws_iam_role.scheduler_role.arn
+  }
 }

@@ -5,5 +5,5 @@ api_clockin_url       = "https://api.peru.talana.com/v1/validateMark/getCreateMa
 clockin_cron          = "cron(0 13 ? * MON-FRI *)"
 clockout_cron         = "cron(0 0 ? * MON-THU *)"
 clockout_fridays_cron = "cron(0 22 ? * FRI *)"
+max_scheduler_window  = 5
 sucursal              = "12345"
-operation_delay       = 300

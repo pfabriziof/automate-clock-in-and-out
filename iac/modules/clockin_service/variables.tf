@@ -38,12 +38,12 @@ variable "clockout_fridays_cron" {
   type        = string
 }
 
+variable "max_scheduler_window" {
+  description = "Max scheduler time window in minutes to realize the operation"
+  type        = number
+}
+
 variable "sucursal" {
   description = "The id for the specific talana branch"
   type        = string
-}
-
-variable "operation_delay" {
-  description = "The max delay for the operation clock-in/out to execute after it's initiated."
-  type        = number
 }
