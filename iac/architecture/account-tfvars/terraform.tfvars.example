@@ -1,3 +1,0 @@
-# ACCOUNT_NAME
-api_login_url   = "https://peru.talana.com/es/api/login/check-login"
-api_clockin_url = "https://api.peru.talana.com/v1/validateMark/getCreateMarkMobile/"

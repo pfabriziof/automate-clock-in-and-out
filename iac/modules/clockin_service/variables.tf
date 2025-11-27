@@ -13,27 +13,6 @@ variable "ecr_repositories" {
   type        = map(any)
 }
 
-variable "clockin_cron" {
-  description = "EventBridge cron expression for clockin time (e.g., 'cron(0 13 ? * MON-FRI *)' for 1:00 PM UTC)."
-  type        = string
-  # Example: 13:00 AM UTC
-  default = "cron(0 13 ? * MON-FRI *)"
-}
-
-variable "clockout_cron" {
-  description = "EventBridge cron expression for clockout time (e.g., 'cron(0 0 ? * MON-THU *)' for 12:00 AM UTC)."
-  type        = string
-  # Example: 24:00 PM UTC
-  default = "cron(0 0 ? * MON-THU *)"
-}
-
-variable "clockout_fridays_cron" {
-  description = "EventBridge cron expression for clockout time (e.g., 'cron(0 22 ? * FRI *)' for 12:00 AM UTC)."
-  type        = string
-  # Example: 24:00 PM UTC
-  default = "cron(0 22 ? * FRI *)"
-}
-
 variable "api_login_url" {
   description = "The full API endpoint URL for user login."
   type        = string
@@ -44,8 +23,27 @@ variable "api_clockin_url" {
   type        = string
 }
 
+variable "clockin_cron" {
+  description = "EventBridge cron expression for clockin time (e.g., 'cron(0 13 ? * MON-FRI *)' for 1:00 PM UTC)."
+  type        = string
+}
+
+variable "clockout_cron" {
+  description = "EventBridge cron expression for clockout time (e.g., 'cron(0 0 ? * MON-THU *)' for 12:00 AM UTC)."
+  type        = string
+}
+
+variable "clockout_fridays_cron" {
+  description = "EventBridge cron expression for clockout time (e.g., 'cron(0 22 ? * FRI *)' for 12:00 AM UTC)."
+  type        = string
+}
+
 variable "sucursal" {
   description = "The id for the specific talana branch"
   type        = string
-  default     = "15327"
+}
+
+variable "operation_delay" {
+  description = "The max delay for the operation clock-in/out to execute after it's initiated."
+  type        = number
 }

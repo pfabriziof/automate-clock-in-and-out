@@ -1,7 +1,0 @@
-{
-    "username": "user@example.com",
-    "password": "my_super_secret_password",
-    "company": false,
-    "identifier": false,
-    "zendesk_params": {}
-}

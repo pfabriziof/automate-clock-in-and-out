@@ -6,7 +6,7 @@ module "clockin_service" {
   function_name     = "${var.project_nickname}-clockin-service"
   function_env_vars = {
     SECRET_ARN      = aws_secretsmanager_secret.config_secret.arn
-    OPERATION_DELAY = 300
+    OPERATION_DELAY = var.operation_delay
   }
   additional_policy_arns = [
     aws_iam_policy.lambda_logging_policy.arn,

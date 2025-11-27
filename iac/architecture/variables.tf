@@ -10,16 +10,6 @@ variable "project_nickname" {
   default     = "clockin"
 }
 
-variable "api_login_url" {
-  description = "The full API endpoint URL for user login."
-  type        = string
-}
-
-variable "api_clockin_url" {
-  description = "The full API endpoint URL for clocking in."
-  type        = string
-}
-
 variable "owner_tag" {
   description = "owner tag for the resources deployed"
   type        = string
@@ -30,6 +20,46 @@ variable "project_tag" {
   description = "project tag for the resources deployed"
   type        = string
   default     = "clockin-automation"
+}
+
+variable "api_login_url" {
+  description = "The full API endpoint URL for user login."
+  type        = string
+}
+
+variable "api_clockin_url" {
+  description = "The full API endpoint URL for clocking in."
+  type        = string
+}
+
+variable "clockin_cron" {
+  description = "EventBridge cron expression for clockin time (e.g., 'cron(0 13 ? * MON-FRI *)' for 1:00 PM UTC)."
+  type        = string
+  default     = "cron(0 13 ? * MON-FRI *)"
+}
+
+variable "clockout_cron" {
+  description = "EventBridge cron expression for clockout time (e.g., 'cron(0 0 ? * MON-THU *)' for 12:00 AM UTC)."
+  type        = string
+  default     = "cron(0 0 ? * MON-THU *)"
+}
+
+variable "clockout_fridays_cron" {
+  description = "EventBridge cron expression for clockout time (e.g., 'cron(0 22 ? * FRI *)' for 12:00 AM UTC)."
+  type        = string
+  default     = "cron(0 22 ? * FRI *)"
+}
+
+variable "sucursal" {
+  description = "The id for the specific talana branch"
+  type        = string
+  default     = "15327"
+}
+
+variable "operation_delay" {
+  description = "The max delay for the operation clock-in/out to execute after it's initiated."
+  type        = number
+  default     = 300
 }
 
 variable "ecr_repositories" {
