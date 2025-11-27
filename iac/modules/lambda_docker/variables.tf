@@ -23,7 +23,7 @@ variable "memory_size" {
 
 variable "timeout" {
   type    = number
-  default = 3
+  default = 300
 }
 
 variable "subnet_ids" {
