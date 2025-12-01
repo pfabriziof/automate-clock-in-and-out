@@ -5,7 +5,7 @@ module "clockin_service" {
   ecr_function_repo = var.ecr_repositories["clockin_service"]
   function_name     = "${var.project_nickname}-clockin-service"
   function_env_vars = {
-    SECRET_ARN      = aws_secretsmanager_secret.config_secret.arn
+    SECRET_ARN = aws_secretsmanager_secret.config_secret.arn
   }
   additional_policy_arns = [
     aws_iam_policy.lambda_logging_policy.arn,
@@ -75,7 +75,7 @@ resource "aws_iam_role_policy" "scheduler_lambda_policy" {
         Action = [
           "lambda:InvokeFunction",
         ]
-        Effect   = "Allow"
+        Effect = "Allow"
         Resource = [
           module.clockin_service.function.arn,
           "${module.clockin_service.function.arn}:*"
@@ -97,10 +97,11 @@ resource "aws_scheduler_schedule" "clockin_scheduler" {
 
   flexible_time_window {
     maximum_window_in_minutes = var.max_scheduler_window
-    mode = "FLEXIBLE"
+    mode                      = "FLEXIBLE"
   }
 
-  schedule_expression = var.clockin_cron
+  schedule_expression          = var.clockin_cron
+  schedule_expression_timezone = var.clockin_timezone
 
   target {
     arn      = module.clockin_service.function.arn
@@ -117,10 +118,11 @@ resource "aws_scheduler_schedule" "clockout_scheduler" {
 
   flexible_time_window {
     maximum_window_in_minutes = var.max_scheduler_window
-    mode = "FLEXIBLE"
+    mode                      = "FLEXIBLE"
   }
 
-  schedule_expression = var.clockout_cron
+  schedule_expression          = var.clockout_cron
+  schedule_expression_timezone = var.clockin_timezone
 
   target {
     arn      = module.clockin_service.function.arn
@@ -137,10 +139,11 @@ resource "aws_scheduler_schedule" "clockout_fridays_scheduler" {
 
   flexible_time_window {
     maximum_window_in_minutes = var.max_scheduler_window
-    mode = "FLEXIBLE"
+    mode                      = "FLEXIBLE"
   }
 
-  schedule_expression = var.clockout_fridays_cron
+  schedule_expression          = var.clockout_fridays_cron
+  schedule_expression_timezone = var.clockin_timezone
 
   target {
     arn      = module.clockin_service.function.arn

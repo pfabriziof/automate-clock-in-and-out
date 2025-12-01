@@ -9,6 +9,7 @@ module "clockin_service" {
   clockin_cron          = var.clockin_cron
   clockout_cron         = var.clockout_cron
   clockout_fridays_cron = var.clockout_fridays_cron
-  sucursal              = var.sucursal
+  clockin_timezone      = var.clockin_timezone
   max_scheduler_window  = var.max_scheduler_window
+  sucursal              = var.sucursal
 }

@@ -33,21 +33,27 @@ variable "api_clockin_url" {
 }
 
 variable "clockin_cron" {
-  description = "EventBridge cron expression for clockin time (e.g., 'cron(0 13 ? * MON-FRI *)' for 1:00 PM UTC)."
+  description = "EventBridge cron expression for clockin time."
   type        = string
-  default     = "cron(0 13 ? * MON-FRI *)"
+  default     = "cron(0 8 ? * MON-FRI *)"
 }
 
 variable "clockout_cron" {
-  description = "EventBridge cron expression for clockout time (e.g., 'cron(0 0 ? * MON-THU *)' for 12:00 AM UTC)."
+  description = "EventBridge cron expression for clockout time."
   type        = string
-  default     = "cron(0 0 ? * MON-THU *)"
+  default     = "cron(0 19 ? * MON-THU *)"
 }
 
 variable "clockout_fridays_cron" {
-  description = "EventBridge cron expression for clockout time (e.g., 'cron(0 22 ? * FRI *)' for 12:00 AM UTC)."
+  description = "EventBridge cron expression for clockout time on fridays."
   type        = string
-  default     = "cron(0 22 ? * FRI *)"
+  default     = "cron(0 17 ? * FRI *)"
+}
+
+variable "clockin_timezone" {
+  description = "Scheduler timezone expression for clockin service to work with localzone"
+  type        = string
+  default     = "America/Lima"
 }
 
 variable "max_scheduler_window" {

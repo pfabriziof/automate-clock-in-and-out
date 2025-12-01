@@ -2,8 +2,9 @@
 # ACCOUNT_NAME
 api_login_url         = "https://peru.talana.com/es/api/login/check-login"
 api_clockin_url       = "https://api.peru.talana.com/v1/validateMark/getCreateMarkMobile/"
-clockin_cron          = "cron(0 13 ? * MON-FRI *)"
-clockout_cron         = "cron(0 0 ? * MON-THU *)"
-clockout_fridays_cron = "cron(0 22 ? * FRI *)"
+clockin_cron          = "cron(0 8 ? * MON-FRI *)"
+clockout_cron         = "cron(0 19 ? * MON-THU *)"
+clockout_fridays_cron = "cron(0 17 ? * FRI *)"
+clockin_timezone      = "America/Lima"
 max_scheduler_window  = 5
 sucursal              = "12345"
