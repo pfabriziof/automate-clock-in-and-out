@@ -6,5 +6,6 @@ clockin_cron          = "cron(0 8 ? * MON-FRI *)"
 clockout_cron         = "cron(0 19 ? * MON-THU *)"
 clockout_fridays_cron = "cron(0 17 ? * FRI *)"
 clockin_timezone      = "America/Lima"
+sucursal              = "15327"
+operation_delay       = 180
 max_scheduler_window  = 5
-sucursal              = "12345"

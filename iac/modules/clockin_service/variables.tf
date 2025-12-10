@@ -43,6 +43,11 @@ variable "clockin_timezone" {
   type        = string
 }
 
+variable "operation_delay" {
+  description = "The max delay for the operation clock-in/out to execute after it's initated."
+  type        = number
+}
+
 variable "max_scheduler_window" {
   description = "Max scheduler time window in minutes to realize the operation"
   type        = number

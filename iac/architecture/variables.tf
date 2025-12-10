@@ -62,6 +62,12 @@ variable "max_scheduler_window" {
   default     = 5
 }
 
+variable "operation_delay" {
+  description = "The max delay for the operation clock-in/out to execute after it's initated."
+  type        = number
+  default     = 180
+}
+
 variable "sucursal" {
   description = "The id for the specific talana branch"
   type        = string

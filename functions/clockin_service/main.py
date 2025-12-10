@@ -1,8 +1,8 @@
 import os
 import json
-# import time
+import time
 import boto3
-# import random
+import random
 import logging
 import requests
 from datetime import datetime
@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 logger.setLevel(os.getenv("LOGGING_LEVEL", "INFO"))
 
 SECRET_ARN = os.environ.get("SECRET_ARN")
-# OPERATION_DELAY = int(os.environ.get("OPERATION_DELAY"))
+OPERATION_DELAY = int(os.environ.get("OPERATION_DELAY"))
 
 
 class AutomationError(Exception):
@@ -82,10 +82,10 @@ def get_secrets(secret_arn: str):
         raise ConfigurationError(f"Failed to retrieve or parse secret: {e}") from e
 
 
-# def random_delay(max_seconds: int) -> None:
-#     delay = random.randint(0, max_seconds)
-#     logger.info("Applying random delay of %d seconds", delay)
-#     time.sleep(delay)
+def random_delay(max_seconds: int) -> None:
+    delay = random.randint(0, max_seconds)
+    logger.info("Applying random delay of %d seconds", delay)
+    time.sleep(delay)
 
 
 def login_request(config: AppConfig):
@@ -193,8 +193,8 @@ def lambda_handler(
 
         logger.info("Starting scheduled operation: %s", operation)
 
-        # random_delay(OPERATION_DELAY)
-        # logger.info("Resuming %s after a delay of %d seconds", operation, OPERATION_DELAY)
+        random_delay(OPERATION_DELAY)
+        logger.info("Resuming %s after a delay of %d seconds", operation, OPERATION_DELAY)
 
         auth_token = login_request(app_config)
         clock_action(app_config, auth_token, operation)

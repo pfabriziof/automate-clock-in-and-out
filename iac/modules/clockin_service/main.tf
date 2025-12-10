@@ -5,7 +5,8 @@ module "clockin_service" {
   ecr_function_repo = var.ecr_repositories["clockin_service"]
   function_name     = "${var.project_nickname}-clockin-service"
   function_env_vars = {
-    SECRET_ARN = aws_secretsmanager_secret.config_secret.arn
+    OPERATION_DELAY = var.operation_delay
+    SECRET_ARN      = aws_secretsmanager_secret.config_secret.arn
   }
   additional_policy_arns = [
     aws_iam_policy.lambda_logging_policy.arn,
