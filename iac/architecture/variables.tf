@@ -41,13 +41,13 @@ variable "clockin_cron" {
 variable "clockout_cron" {
   description = "EventBridge cron expression for clockout time."
   type        = string
-  default     = "cron(0 19 ? * MON-THU *)"
+  default     = "cron(50 18 ? * MON-THU *)"
 }
 
 variable "clockout_fridays_cron" {
   description = "EventBridge cron expression for clockout time on fridays."
   type        = string
-  default     = "cron(0 17 ? * FRI *)"
+  default     = "cron(50 16 ? * FRI *)"
 }
 
 variable "clockin_timezone" {
@@ -59,7 +59,7 @@ variable "clockin_timezone" {
 variable "max_scheduler_window" {
   description = "Max scheduler time window in minutes to realize the operation"
   type        = number
-  default     = 5
+  default     = 3
 }
 
 variable "operation_delay" {

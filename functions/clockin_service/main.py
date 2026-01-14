@@ -15,6 +15,8 @@ logger.setLevel(os.getenv("LOGGING_LEVEL", "INFO"))
 SECRET_ARN = os.environ.get("SECRET_ARN")
 OPERATION_DELAY = int(os.environ.get("OPERATION_DELAY"))
 
+# TODO @pfalcon: include API to check for holidays 
+# https://speca.io/integracionesvendemas/api-feriados#generacion-token-de-seguridad
 
 class AutomationError(Exception):
     """Base class for all custom automation errors."""
